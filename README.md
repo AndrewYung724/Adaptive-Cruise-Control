@@ -5,6 +5,20 @@ Design of a game theoretic adaptive cruise control algorithm using a one player 
 
 For this project we contrain the autonomous driving challenge to one-dimension where the autonomous driver is simply attempting to achieve its set speed while avoiding collisions.
 
+<p align="center">
+<img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154119192-a5beb4db-27c0-49e9-9492-d5ec3c4cff09.PNG">
+<p align = "center">
+Fig.1 - Simplified Adaptive cruise control model.
+</p>
+
+With full information structure the autonomous driver (in red) is able to read the following state variables:
+
+![image](https://user-images.githubusercontent.com/38053500/154146269-56166ff4-fda1-4b33-be16-6107cf9921d6.png)
+<p align = "center">
+Fig.2 - Model state variables
+</p>
+
+
 
 
 ### Dependencies
