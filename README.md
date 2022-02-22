@@ -24,12 +24,12 @@ With the state variables defined we can now formulate our ACC one-player dynamic
 <p align = "center">
 Fig.3 - One-Player Dynamic Game formulation
 </p>
-Where the action u<sub>k</sub> represents the action taken at time step k. However, how is the optimal u<sub>k</sub> that best acheives the objectives of avoiding collisions and reaching its velocity setpoint? For this challenge, we introduce a performance metric known as the cost function J(x<sub>k</sub>,u<sub>k</sub>) 
+Where the action u<sub>k</sub> represents the action taken at time step k. However, how is the optimal u<sub>k</sub> that balances our objectives determined? For this challenge, we introduce a performance metric known as the cost function J(x<sub>k</sub>,u<sub>k</sub>) 
 
 
 ### Cost Function
 
-The cost function should penalize two main phenomena for this problem:
+The cost function should penalize two main phenomena in this scenario:
 1. Events where a collision is likely
 2. Deviations from our velocity setpoint
 
@@ -42,7 +42,7 @@ For measuring the likelihood of a potential crash we use the time-to-collision m
 Fig.4 - TTC Derivation
 </p>
 
-This derivation simply takes care of the positive and negative cases of relative distance and velocity so we reach a compact and correct form of the metric.
+TTC is simply the relative velocity over relative distance. This derivation simply takes care of the positive and negative cases of relative distance and velocity so we reach a compact and correct form of the metric. The TTC metric is robust against scenarios where the driver has a vehicle converging on his/her tail at a high speed. It also works in the best interest of traffic overall since it deters against any premature breaking.
 
 With our TTC defined, we insert the metric into an asymptotic function to map the TTC to a cost scalar.
 
@@ -52,7 +52,7 @@ With our TTC defined, we insert the metric into an asymptotic function to map th
 Fig.5 - TTC to Cost Mapping
 </p>
 
-This asymptotic function enables us to exponentially penalize the TTC as it approaches zero (i.e. a collision). α in this equation is a weight that controls when the TTC threshold should start exploding to large scalars (i.e. how heavily we want to avoid crashes).
+This asymptotic function enables us to exponentially penalize the TTC as it approaches zero (i.e. a collision). α in this equation is a weight that controls when the TTC threshold should start exploding to large scalars (i.e. start penalizing when TTC<15 seconds).
 
 When we subsitute the TTC for the front and rear cars into this function we obtain the following cost function for avoiding collisions.
 
@@ -84,7 +84,7 @@ Fig.8 - Complete ACC Cost Function.
 
 ### Finding the Optimal Action: Receding Horizon Control
 Intuitively, if the action commits to the maximum acceleration it crashes into the front vehicle and if it commits to the minimum acceleration the rear vehicle will crash into it. In both cases the cost function explodes to infinity. So how do we find the middle ground that minimizes the cost function? We implement a receding horizon control algorithm that works as follows:
-1. Discretize the action space u∈[-a,a] into M accerlations
+1. Discretize the action space u∈[-a<sub>max</sub>,a<sub>max</sub>] into M distinct accerlations
 2. Read the state variables x<sub>k</sub>
 3. At time step k, simulate N time steps ahead for all possible actions, assuming the front and rear vehicles will commit to the same velocity for those time steps.
 4. Evaluate the states for each action time step pair.
@@ -122,7 +122,7 @@ N \text{ Time Steps}
  \end{pmatrix} 
 -->
 6. Sum across the time steps and select the jth action that yields the lowest cost
-\\
+
 <p align= "center">
 <img width="700" alt="model" src="https://user-images.githubusercontent.com/38053500/154822499-23b8c325-e618-4b4b-93bb-8ebcadad7298.png">
 <p align = "center">
@@ -152,6 +152,9 @@ For simulation we assume the following state initial condition and model paramet
 |α|0.0005|
 |β|5000|
 |V<sub>ref</sub>| 100 m/s|
+|N| 2 s| 
+ |a<sub>max</sub> | 3.5 m/s<sup>2</sup>
+ |a<sub>l</sub> = a<sub>r</sub> | sin(0.3t) |
 
 </td></tr> </table>
 <p></p>
@@ -166,46 +169,18 @@ Fig.9 - Adaptive Cruise Control Demo.
 
 From this result we conclude that the ACC is a success! The ego vehicle working under the ACC algorithm appropriately applies its maximum acceleration to avoid being rear ended. After avoiding a collision we can see that it is attempting to reach its setpoint of 100m/s but is limited to the front vehicle's position.
 
-
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
-
+ 
 ## Future Improvements
 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
-## Authors
-
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
+With the logic of the game theoretic adaptive cruise control in place, some future improvements for this ACC include:
+ - Enable ego car to detect front and rear relative distances instead of just passing the values through in simulation
+ - Make distance and velocity estimates robust to noise/disturbances
+ - Propperly car's gas -> position plant
+ - Remodel cars to occupy some distances instead of just point agents
+ - Can include objective of conserving fuel or minimize braking
+ - Add additional minimum safety distances for margin of error
+ - Accurate models of humans and their driving policy
+ 
 ## Acknowledgments
-
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+This was the final project of UCSB's ECE 270 Course, Non-cooperative Game Theory, taught by Prof. Joao Hespanha Fall 2021.
+ 
