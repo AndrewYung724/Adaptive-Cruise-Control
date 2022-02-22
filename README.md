@@ -18,18 +18,18 @@ With full information structure the autonomous driver (in red) is able to read t
 Fig.2 - Model state variables
 </p>
 
-With the state variables defined we can now formulate our ADC one-player dynamic game.
+With the state variables defined we can now formulate our ACC one-player dynamic game.
 <p align= "center">
 <img width="750" alt="model" src="https://user-images.githubusercontent.com/38053500/154816420-51d9446e-1e78-4ba2-8078-8a1bdb78b117.png">
 <p align = "center">
 Fig.3 - One-Player Dynamic Game formulation
 </p>
-Where the action u<sub>k</sub> represents the action taken at time step k. However, how do we choose the optimal u<sub>k</sub> so that the autonomous driver's state achieves its objective of avoiding collisions and achieving its setpoint? For this we introduce a metric of performance called the cost function J(x<sub>k</sub>,u<sub>k</sub>) 
+Where the action u<sub>k</sub> represents the action taken at time step k. However, how is the optimal u<sub>k</sub> that best acheives the objectives of avoiding collisions and reaching its velocity setpoint? For this challenge, we introduce a performance metric known as the cost function J(x<sub>k</sub>,u<sub>k</sub>) 
 
 
 ### Cost Function
 
-Our cost function should penalize two main phenomena:
+The cost function should penalize two main phenomena:
 1. Events where a collision is likely
 2. Deviations from our velocity setpoint
 
@@ -52,7 +52,7 @@ With our TTC defined, we insert the metric into an asymptotic function to map th
 Fig.5 - TTC to Cost Mapping
 </p>
 
-This asymptotic function enables us to exponentially penalize the TTC as it approaches zero (i.e. a collision). α in this equation is a weight that controls the TTC threshold has the cost start exploding to large scalars.
+This asymptotic function enables us to exponentially penalize the TTC as it approaches zero (i.e. a collision). α in this equation is a weight that controls when the TTC threshold should start exploding to large scalars.
 
 When we subsitute the TTC for the front and rear cars into this function we obtain the following cost function for avoiding collisions.
 
@@ -61,10 +61,6 @@ When we subsitute the TTC for the front and rear cars into this function we obta
 <p align = "center">
 Fig.6 - Collsion  likelihood cost function
 </p>
-
-
-
-
 
 #### Penalizing Deviation from velocity
 The cost of deviation from our velocity can be represented simply through the following equation:
@@ -78,21 +74,20 @@ Fig.7 - Velocity Setpoint Cost Function
 Where β represents a weight on how much we want the car to prioritize reaching the setpoint.
 
 #### Cost Function Construction
-
 Finally, we acheive our cost function for which we want to minimize subject to our action u<sub>k</sub>. 
-
 
 <p align= "center">
 <img width="400" alt="https://user-images.githubusercontent.com/38053500/154821427-d5083a22-7505-4901-b872-3416b4bfc0c6.png">
 <p align = "center">
-Fig.8 - Complete ADC Cost Function.
+Fig.8 - Complete ACC Cost Function.
 </p>
 
 ### Finding the Optimal Action
-
-Intuitively, if the action commits to the maximum acceleration it crashes into the front vehicle and if it commits to the minimum acceleration the rear vehicle will crash into it. In both cases the cost function explodes to infinity. So how do we find the middle ground that minimizes the cost function? We implement a receding horizon control algorithm that works as follows.
-1. At time step k, simulate N time steps ahead for all possible actions, assuming the front and rear vehicles will commit to the same velocity for those time steps.
-2. Evaluate the states for the full actions space and N time steps.
+Intuitively, if the action commits to the maximum acceleration it crashes into the front vehicle and if it commits to the minimum acceleration the rear vehicle will crash into it. In both cases the cost function explodes to infinity. So how do we find the middle ground that minimizes the cost function? We implement a receding horizon control algorithm that works as follows:
+1. Discretize the action space u∈[-a,a] into M accerlations
+2. Read the state variables x<sub>k</sub>
+3. At time step k, simulate N time steps ahead for all possible actions, assuming the front and rear vehicles will commit to the same velocity for those time steps.
+4. Evaluate the states for each action time step pair.
 <!--
 N \text{ Time Steps}
 \begin{cases}
@@ -108,14 +103,12 @@ N \text{ Time Steps}
 <p align= "center">
 <img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154822135-ca373dd4-1e67-47a5-bcc4-4ad89e4de344.png">
 <p align = "center">
-Fig.9 - Simulating environment across M discretized actions for N discrete time steps
 </p>
 
-3. Evaluate the cost function for each state
+5. Evaluate the cost function for all states
 <p align= "center">
 <img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154822179-04c3858d-d2dc-4f5e-8cbe-9266529321e9.png">
 <p align = "center">
-Fig.10 - Evaluating state with cost function across N time steps
 </p>
 <!--
 \begin{pmatrix}
@@ -128,15 +121,18 @@ Fig.10 - Evaluating state with cost function across N time steps
  \sum_{i=1}^N J( \underline{x}_{i1})& \cdots & \sum_{i=1}^N J( \underline{x}_{iM})\\
  \end{pmatrix} 
 -->
+6. Sum across the time steps and select the jth action that yields the lowest cost
+\\
+<p align= "center">
+<img width="700" alt="model" src="https://user-images.githubusercontent.com/38053500/154822499-23b8c325-e618-4b4b-93bb-8ebcadad7298.png">
+<p align = "center">
+</p>
 
+7. Apply action and iterate for next step.
 
+### Results
 
-
-
-### Installing
-
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+For simulation we assumed the surrounding "human" drivers to operate under a 30m/s sinusodal velocity 
 
 ### Executing program
 
@@ -146,7 +142,7 @@ Fig.10 - Evaluating state with cost function across N time steps
 code blocks for commands
 ```
 
-## Help
+## Future Improvements
 
 Any advise for common problems or issues.
 ```
