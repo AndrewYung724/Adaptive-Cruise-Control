@@ -135,16 +135,24 @@ N \text{ Time Steps}
 For simulation we assume the following state initial condition and model parameters.
 
 <table>
-<tr><th>State Initial Conditions </th><th>Model Parameters</th></tr>
+<tr><th> Initial States </th><th>Model Parameters</th></tr>
 <tr><td>
 
-|| Middle | Table 2|
-|a| not b|and c |
-
+|State| Value|
+|--|--|
+ |v<sub>l</sub>| 30 m/s |
+ |v<sub>r</sub>| 30 m/s |
+ |v<sub>e</sub>| 30 m/s |
+ |x<sub>l</sub>| 60 m |
+ |x<sub>l<rsub>| 6 m |
 </td><td>
 
-|b|1|2|3| 
-|a|s|d|f|
+|Parameter|Value| 
+|--|--|
+|α|0.0005|
+|β|5000|
+|V<sub>ref</sub>| 100 m/s|
+ 
 
 </td></tr> </table>
 
