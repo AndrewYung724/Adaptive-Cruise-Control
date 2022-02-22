@@ -29,7 +29,7 @@ Where the action u<sub>k</sub> represents the action taken at time step k. Howev
 
 ### Cost Function
 
-The cost function should penalize two main phenomena:
+The cost function should penalize two main phenomena for this problem:
 1. Events where a collision is likely
 2. Deviations from our velocity setpoint
 
@@ -42,7 +42,7 @@ For measuring the likelihood of a potential crash we use the time-to-collision m
 Fig.4 - TTC Derivation
 </p>
 
-This derivation simply takes care of the positive and negative cases of relative distance and velocity so we reach a compact form of the metric.
+This derivation simply takes care of the positive and negative cases of relative distance and velocity so we reach a compact and correct form of the metric.
 
 With our TTC defined, we insert the metric into an asymptotic function to map the TTC to a cost scalar.
 
@@ -52,7 +52,7 @@ With our TTC defined, we insert the metric into an asymptotic function to map th
 Fig.5 - TTC to Cost Mapping
 </p>
 
-This asymptotic function enables us to exponentially penalize the TTC as it approaches zero (i.e. a collision). α in this equation is a weight that controls when the TTC threshold should start exploding to large scalars.
+This asymptotic function enables us to exponentially penalize the TTC as it approaches zero (i.e. a collision). α in this equation is a weight that controls when the TTC threshold should start exploding to large scalars (i.e. how heavily we want to avoid crashes).
 
 When we subsitute the TTC for the front and rear cars into this function we obtain the following cost function for avoiding collisions.
 
@@ -82,7 +82,7 @@ Finally, we acheive our cost function for which we want to minimize subject to o
 Fig.8 - Complete ACC Cost Function.
 </p>
 
-### Finding the Optimal Action
+### Finding the Optimal Action: Receding Horizon Control
 Intuitively, if the action commits to the maximum acceleration it crashes into the front vehicle and if it commits to the minimum acceleration the rear vehicle will crash into it. In both cases the cost function explodes to infinity. So how do we find the middle ground that minimizes the cost function? We implement a receding horizon control algorithm that works as follows:
 1. Discretize the action space u∈[-a,a] into M accerlations
 2. Read the state variables x<sub>k</sub>
@@ -132,7 +132,32 @@ N \text{ Time Steps}
 
 ### Results
 
-For simulation we assumed the surrounding "human" drivers to operate under a 30m/s sinusodal velocity 
+For simulation we assume the following state initial condition and model parameters.
+
+<table>
+<tr><th>State Initial Conditions </th><th>Model Parameters</th></tr>
+<tr><td>
+
+|| Middle | Table 2|
+|a| not b|and c |
+
+</td><td>
+
+|b|1|2|3| 
+|a|s|d|f|
+
+</td></tr> </table>
+
+
+
+<p align= "center">
+<img width="1000" alt="model"src="https://user-images.githubusercontent.com/38053500/155222122-cbb095aa-e118-4cbd-b5a3-f1b71a6e97a3.gif">
+<p align = "center">
+Fig.9 - ACC Simulation
+</p>
+
+From this result we conclude that the ACC is a success! The ego vehicle working under the ACC algorithm appropriately applies its maximum acceleration to avoid being rear ended. After avoiding a collision we can see that it is attempting to reach its setpoint of 100m/s but is limited to the front vehicle's position.
+
 
 ### Executing program
 
