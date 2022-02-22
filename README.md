@@ -77,7 +77,7 @@ Where β represents a weight on how much we want the car to prioritize reaching 
 Finally, we acheive our cost function for which we want to minimize subject to our action u<sub>k</sub>. 
 
 <p align= "center">
-<img width="400" alt="https://user-images.githubusercontent.com/38053500/154821427-d5083a22-7505-4901-b872-3416b4bfc0c6.png">
+<img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154821427-d5083a22-7505-4901-b872-3416b4bfc0c6.png">
 <p align = "center">
 Fig.8 - Complete ACC Cost Function.
 </p>
@@ -133,7 +133,7 @@ N \text{ Time Steps}
 ### Results
 
 For simulation we assume the following state initial condition and model parameters.
-
+<p align="center"></p>
 <table>
 <tr><th> Initial States </th><th>Model Parameters</th></tr>
 <tr><td>
@@ -152,20 +152,17 @@ For simulation we assume the following state initial condition and model paramet
 |α|0.0005|
 |β|5000|
 |V<sub>ref</sub>| 100 m/s|
- 
 
 </td></tr> </table>
+<p></p>
 
 
+https://user-images.githubusercontent.com/38053500/155233557-6616bdc3-0f01-4ce4-a663-8e377ac81273.mp4
 
-
-
-
-<p align= "center">
-https://user-images.githubusercontent.com/38053500/155233198-c274aef8-f137-46c2-a20c-1cdeada05a5a.mp4
 <p align = "center">
-Fig.9 - ACC Simulation
+Fig.9 - Adaptive Cruise Control Demo.
 </p>
+
 
 From this result we conclude that the ACC is a success! The ego vehicle working under the ACC algorithm appropriately applies its maximum acceleration to avoid being rear ended. After avoiding a collision we can see that it is attempting to reach its setpoint of 100m/s but is limited to the front vehicle's position.
 
