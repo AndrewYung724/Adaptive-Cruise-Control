@@ -158,8 +158,11 @@ For simulation we assume the following state initial condition and model paramet
 
 
 
+
+
+
 <p align= "center">
-<img width="1000" alt="model"src="https://user-images.githubusercontent.com/38053500/155222122-cbb095aa-e118-4cbd-b5a3-f1b71a6e97a3.gif">
+https://user-images.githubusercontent.com/38053500/155233198-c274aef8-f137-46c2-a20c-1cdeada05a5a.mp4
 <p align = "center">
 Fig.9 - ACC Simulation
 </p>
