@@ -2,8 +2,7 @@
 Design of a game theoretic adaptive cruise control algorithm using a one player dynamic game model with full information structure. We apply a receding horizon control algorithm for predicting the actions of other players/drivers to yield the optimal acceleration.
 
 ## Model Assumptions
-
-For this project we constrain the autonomous driving challenge to one-dimension where the autonomous driver is attempting to achieve its set speed while avoiding collisions.
+For this project we constrain the autonomous driving challenge to one-dimension where the autonomous driver's objective is to achieve its set speed while avoiding collisions.
 
 <p align="center">
 <img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154119192-a5beb4db-27c0-49e9-9492-d5ec3c4cff09.PNG">
@@ -12,6 +11,7 @@ Fig.1 - Simplified Adaptive cruise control model.
 </p>
 
 With full information structure the autonomous driver (in red) is able to read the following state variables:
+
 <p align= "center">
 <img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154146269-56166ff4-fda1-4b33-be16-6107cf9921d6.png">
 <p align = "center">
@@ -20,7 +20,7 @@ Fig.2 - Model state variables
 
 With the state variables defined we can now formulate our ACC one-player dynamic game.
 <p align= "center">
-<img width="750" alt="model" src="https://user-images.githubusercontent.com/38053500/154816420-51d9446e-1e78-4ba2-8078-8a1bdb78b117.png">
+<img width="750" alt="model" src="https://user-images.githubusercontent.com/38053500/155250164-bff7c565-7248-42df-9f8f-c22b1fab3d81.png">
 <p align = "center">
 Fig.3 - One-Player Dynamic Game formulation
 </p>
@@ -28,7 +28,6 @@ Where the action u<sub>k</sub> represents the action taken at time step k. Howev
 
 
 ### Cost Function
-
 The cost function should penalize two main phenomena in this scenario:
 1. Events where a collision is likely
 2. Deviations from our velocity setpoint
@@ -42,7 +41,7 @@ For measuring the likelihood of a potential crash we use the time-to-collision m
 Fig.4 - TTC Derivation
 </p>
 
-TTC is simply the relative velocity over relative distance. This derivation simply takes care of the positive and negative cases of relative distance and velocity so we reach a compact and correct form of the metric. The TTC metric is robust against scenarios where the driver has a vehicle converging on his/her tail at a high speed. It also works in the best interest of traffic overall since it deters against any premature breaking.
+TTC is simply the relative velocity over relative distance. This derivation only taking care of the positive and negative cases of relative distance and velocity so we reach a compact and correct form of the metric. The TTC metric is robust against scenarios where the driver has a vehicle converging on his/her tail at a high speed. It also works in the best interest of traffic overall since it deters against any premature breaking.
 
 With our TTC defined, we insert the metric into an asymptotic function to map the TTC to a cost scalar.
 
@@ -57,7 +56,7 @@ This asymptotic function enables us to exponentially penalize the TTC as it appr
 When we subsitute the TTC for the front and rear cars into this function we obtain the following cost function for avoiding collisions.
 
 <p align= "center">
-<img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154817742-21d03e5f-ff40-4659-9e27-91be29ab8ced.png">
+<img width="550" alt="model" src="https://user-images.githubusercontent.com/38053500/154817742-21d03e5f-ff40-4659-9e27-91be29ab8ced.png">
 <p align = "center">
 Fig.6 - Collsion  likelihood cost function
 </p>
@@ -77,12 +76,12 @@ Where β represents a weight on how much we want the car to prioritize reaching 
 Finally, we acheive our cost function for which we want to minimize subject to our action u<sub>k</sub>. 
 
 <p align= "center">
-<img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154821427-d5083a22-7505-4901-b872-3416b4bfc0c6.png">
+<img width="700" alt="model" src="https://user-images.githubusercontent.com/38053500/154821427-d5083a22-7505-4901-b872-3416b4bfc0c6.png">
 <p align = "center">
 Fig.8 - Complete ACC Cost Function.
 </p>
 
-### Finding the Optimal Action: Receding Horizon Control
+## Finding the Optimal Action: Receding Horizon Control
 Intuitively, if the action commits to the maximum acceleration it crashes into the front vehicle and if it commits to the minimum acceleration the rear vehicle will crash into it. In both cases the cost function explodes to infinity. So how do we find the middle ground that minimizes the cost function? We implement a receding horizon control algorithm that works as follows:
 1. Discretize the action space u∈[-a<sub>max</sub>,a<sub>max</sub>] into M distinct accerlations
 2. Read the state variables x<sub>k</sub>
@@ -101,13 +100,13 @@ N \text{ Time Steps}
 -->
 
 <p align= "center">
-<img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154822135-ca373dd4-1e67-47a5-bcc4-4ad89e4de344.png">
+<img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/155251147-25af8547-7731-4229-bc8d-c36f70f909ab.png">
 <p align = "center">
 </p>
 
 5. Evaluate the cost function for all states
 <p align= "center">
-<img width="400" alt="model" src="https://user-images.githubusercontent.com/38053500/154822179-04c3858d-d2dc-4f5e-8cbe-9266529321e9.png">
+<img width="500" alt="model" src="https://user-images.githubusercontent.com/38053500/154822179-04c3858d-d2dc-4f5e-8cbe-9266529321e9.png">
 <p align = "center">
 </p>
 <!--
@@ -130,7 +129,7 @@ N \text{ Time Steps}
 
 7. Apply action and iterate for next step.
 
-### Results
+## Results
 
 For simulation we assume the following state initial condition and model parameters.
 <p align="center"></p>
@@ -144,7 +143,7 @@ For simulation we assume the following state initial condition and model paramet
  |v<sub>r</sub>| 30 m/s |
  |v<sub>e</sub>| 30 m/s |
  |x<sub>l</sub>| 60 m |
- |x<sub>l<rsub>| 6 m |
+ |x<sub>r<rsub>| 6 m |
 </td><td>
 
 |Parameter|Value| 
@@ -163,11 +162,14 @@ For simulation we assume the following state initial condition and model paramet
 https://user-images.githubusercontent.com/38053500/155233557-6616bdc3-0f01-4ce4-a663-8e377ac81273.mp4
 
 <p align = "center">
-Fig.9 - Adaptive Cruise Control Demo.
+Fig.9 - Adaptive Cruise Control Demonstration
 </p>
 
 
-From this result we conclude that the ACC is a success! The ego vehicle working under the ACC algorithm appropriately applies its maximum acceleration to avoid being rear ended. After avoiding a collision we can see that it is attempting to reach its setpoint of 100m/s but is limited to the front vehicle's position.
+From this result we conclude that the ACC is a success! The ego vehicle working under the ACC algorithm, appropriately applies its maximum acceleration to avoid being rear ended. After avoiding a collision we can see that it is attempting to reach its setpoint of 100m/s but is limited to the front vehicle's position.
+ 
+## Summary
+ In summary, this ACC algorithm is simulates the performance of all actions before selecting the best action. During this simulation the algorithm assumes the other agents will commit to their speeds for the next N time steps and evaluates the states for all possible actions for N time steps. Once the states are calculated through simple kinematic equations, we evaluate the performance of action by applying the cost function along the trajectory of each action. Then we select the action associated with best performance (i.e. lowest cost). 
 
  
 ## Future Improvements
