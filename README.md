@@ -184,5 +184,5 @@ With the logic of the game theoretic adaptive cruise control in place, some futu
  - Accurate models of humans and their driving policy
  
 ## Acknowledgments
-This was the final project of UCSB's ECE 270 Course, Non-cooperative Game Theory, taught by Prof. Joao Hespanha Fall 2021.
+This was the final project of UCSB's ECE 270 course, Non-Cooperative Game Theory, taught by Professor Joao Hespanha fall 2021.
  
