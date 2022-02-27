@@ -85,8 +85,7 @@ Fig.8 - Complete ACC Cost Function.
 Intuitively, if the action commits to the maximum acceleration it crashes into the front vehicle and if it commits to the minimum acceleration the rear vehicle will crash into it. In both cases the cost function explodes to infinity. So how do we find the middle ground that minimizes the cost function? We implement a receding horizon control algorithm that works as follows:
 1. Discretize the action space u∈[-a<sub>max</sub>,a<sub>max</sub>] into M distinct accerlations
 2. Read the state variables x<sub>k</sub>
-3. At time step k, simulate N time steps ahead for all possible actions, assuming the front and rear vehicles will commit to the same velocity for those time steps.
-4. Evaluate the states for each action time step pair.
+3. At time step k, simulate N time steps ahead for all possible actions, assuming the front and rear vehicles will commit to the same velocity for those time steps. Evaluate the states for each action time step pair.
 <!--
 N \text{ Time Steps}
 \begin{cases}
@@ -104,7 +103,7 @@ N \text{ Time Steps}
 <p align = "center">
 </p>
 
-5. Evaluate the cost function for all states
+4. Evaluate the cost function for all states
 <p align= "center">
 <img width="500" alt="model" src="https://user-images.githubusercontent.com/38053500/154822179-04c3858d-d2dc-4f5e-8cbe-9266529321e9.png">
 <p align = "center">
@@ -120,14 +119,14 @@ N \text{ Time Steps}
  \sum_{i=1}^N J( \underline{x}_{i1})& \cdots & \sum_{i=1}^N J( \underline{x}_{iM})\\
  \end{pmatrix} 
 -->
-6. Sum across the time steps and select the jth action that yields the lowest cost
+5. Sum across the time steps and select the jth action that yields the lowest cost
 
 <p align= "center">
 <img width="700" alt="model" src="https://user-images.githubusercontent.com/38053500/154822499-23b8c325-e618-4b4b-93bb-8ebcadad7298.png">
 <p align = "center">
 </p>
 
-7. Apply action and iterate for next step.
+6. Apply action and iterate for next step.
 
 ## Results
 
@@ -153,7 +152,7 @@ For simulation we assume the following state initial condition and model paramet
 |V<sub>ref</sub>| 100 m/s|
 |N| 2 s| 
  |a<sub>max</sub> | 3.5 m/s<sup>2</sup>
- |a<sub>l</sub> = a<sub>r</sub> | sin(0.3t) |
+ |a<sub>l</sub> = a<sub>r</sub> | sin(0.3t) (67-81mph) |
 
 </td></tr> </table>
 <p></p>
